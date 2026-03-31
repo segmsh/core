@@ -1,0 +1,33 @@
+{
+  "name": "@segmsh/core",
+  "repository": "segmsh/core",
+  "license": "Apache-2.0",
+  "author": "Segm.sh",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@types/hast": "^3.0.4",
+    "hastscript": "^9.0.1",
+    "js-md5": "^0.8.3",
+    "unist-util-visit": "^5.1.0",
+    "unist-util-visit-parents": "^6.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2"
+  }
+}
