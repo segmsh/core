@@ -1,12 +1,6 @@
-# Segm.sh Core
+# @segmsh/core
 
-
-
-## Features
-
-- **Abstract Processor**: A base class for creating custom processors that work seamlessly with the Localize.sh CLI (Node.js) and in browser environments.
-- **ID Generation**: Built-in `id()` method for generating deterministic MD5-based segment IDs.
-- **Type Definitions**: Comprehensive TypeScript definitions for Documents, Segments, and Layouts (HAST compatible).
+Core types and utilities for the Segm.sh.
 
 ## Installation
 
@@ -16,28 +10,26 @@ npm install @segmsh/core
 
 ## Usage
 
-### Creating a Processor
+### Implementing a Processor
 
-Extend the `Processor` abstract class to implement your custom localization logic. This works for both CLI tools and browser-based processors.
+Implement the `Processor` interface to create a custom processor.
 
 ```typescript
-import { Processor, Document, root, segment } from "@segmsh/core";
+import { Processor, Document, id, root, segment } from "@segmsh/core";
 
 interface MyParseOptions {
   preserveWhitespace?: boolean;
 }
 
-export class MyCustomProcessor extends Processor<MyParseOptions> {
-  // Parse a source file (e.g., Markdown, JSON) into a Segm Document
+export class MyProcessor implements Processor<MyParseOptions> {
   parse(res: string, options?: MyParseOptions): Document {
-    const id = this.id("Hello World");
+    const segId = id({ text: "Hello World" });
     return {
-      segments: [{ id, text: "Hello World" }],
-      layout: root([segment(id)])
+      segments: [{ id: segId, text: "Hello World" }],
+      tree: root([segment(segId)]),
     };
   }
 
-  // Convert a Segm Document back into the source format
   stringify(doc: Document): string {
     return doc.segments.map(s => s.text).join("\n");
   }
@@ -46,34 +38,32 @@ export class MyCustomProcessor extends Processor<MyParseOptions> {
 
 ### ID Generation
 
-The `Processor` base class provides a built-in `id()` method for generating deterministic segment IDs based on text, tags, and metadata.
+Use `id()` to generate deterministic MD5-based segment IDs from segment content.
 
 ```typescript
-const id = this.id("Hello {b1}World{/b1}", { b1: { class: "bold" } });
-const idWithMeta = this.id("Hello World", undefined, { section: "header" });
+import { id } from "@segmsh/core";
+
+const segId = id({ text: "Hello World" });
+const segIdWithTags = id({ text: "Hello {b1}World{/b1}", tags: { b1: { class: "bold" } } });
+const segIdWithMeta = id({ text: "Hello World", metadata: { section: "header" } });
+```
+
+### Tree Helpers
+
+```typescript
+import { root, element, segment, text } from "@segmsh/core";
+
+const tree = root([
+  element("p", segment("seg-1"), text("Hello")),
+]);
 ```
 
 ## Development
 
-1.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
-
-2.  **Generate schema types**:
-    ```bash
-    npm run schema
-    ```
-
-3.  **Build the SDK**:
-    ```bash
-    npm run build
-    ```
-
-4.  **Run Tests**:
-    ```bash
-    npm test
-    ```
+```bash
+npm install
+npm run build
+```
 
 ## License
 
