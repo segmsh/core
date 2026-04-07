@@ -38,14 +38,18 @@ export class MyProcessor implements Processor<MyParseOptions> {
 
 ### ID Generation
 
-Use `id()` to generate deterministic MD5-based segment IDs from segment content.
+Use `id()` to generate deterministic MD5-based segment IDs. Accepts a string key (for key-value formats) or segment content (for structured formats).
 
 ```typescript
 import { id } from "@segmsh/core";
 
+// Key-value formats (JSON, YAML)
+const segId = id("button.submit");
+
+// Structured formats (HTML, Markdown)
 const segId = id({ text: "Hello World" });
-const segIdWithTags = id({ text: "Hello {b1}World{/b1}", tags: { b1: { class: "bold" } } });
-const segIdWithMeta = id({ text: "Hello World", metadata: { section: "header" } });
+const segId = id({ text: "Hello {b1}World{/b1}", tags: { b1: { class: "bold" } } });
+const segId = id({ text: "Hello World", metadata: { section: "header" } });
 ```
 
 ### Tree Helpers
