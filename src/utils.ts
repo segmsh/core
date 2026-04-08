@@ -26,5 +26,5 @@ export function id(input: string | Omit<Segment, "id">): string {
     return md5(input);
   }
 
-  return md5(JSON.stringify(canonicalize(input as unknown as Value)));
+  return md5(JSON.stringify(canonicalize(input)));
 }
