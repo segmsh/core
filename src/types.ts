@@ -1,5 +1,13 @@
 import { Root, Node } from "hast";
 
+export type Value =
+  | string
+  | number
+  | boolean
+  | null
+  | Value[]
+  | { [key: string]: Value };
+
 export interface SegmentRef extends Node {
   type: "segment";
   id: string;
@@ -15,14 +23,14 @@ export interface Segment {
   id: string;
   text: string;
   tags?: { [k: string]: Tag; };
-  metadata?: { [k: string]: unknown; };
+  metadata?: { [k: string]: Value; };
 }
 
 // Document type with typed tree
 export interface Document {
   tree: Root;
   segments: Segment[];
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: Value };
 }
 
 export interface Processor<
